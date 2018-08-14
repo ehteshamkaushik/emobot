@@ -1,0 +1,8 @@
+Angry
+No of Words in a sentcence :  2
+Intensity :  37.48743055901609
+volume : 0.12066876755118161
+Duration :  0.30943310657596373
+PitchVariance =  0.2770898992365057
+PitchRange =  469.330623626709
+Rate in WPM : 112.03556684661797

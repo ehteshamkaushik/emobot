@@ -1,0 +1,8 @@
+Fear
+No of Words in a sentcence :  3
+Intensity :  37.44449162630137
+volume : 0.10097253878231255
+Duration :  1.1169992441421013
+PitchVariance =  0.47737092791863206
+PitchRange =  361.5053503853934
+Rate in WPM : 32.50454523119257

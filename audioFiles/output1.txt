@@ -1,0 +1,8 @@
+Normal
+No of Words in a sentcence :  3
+Intensity :  33.86305279005628
+volume : 0.07472286618407267
+Duration :  0.4382842025699169
+PitchVariance =  5.0095044304342835
+PitchRange =  527.9518127441406
+Rate in WPM : 82.94497502664521

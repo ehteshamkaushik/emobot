@@ -1,0 +1,8 @@
+Happy
+No of Words in a sentcence :  3
+Intensity :  36.84283825127446
+volume : 0.10031743352978001
+Duration :   0.5244444444444444
+PitchVariance =  0.6513635635375976
+PitchRange =  436.72246265411377
+Rate in WPM :  63.079099187870504

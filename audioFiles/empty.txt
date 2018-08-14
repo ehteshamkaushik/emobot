@@ -1,0 +1,7 @@
+Google Speech Recognition could not understand audio
+Intensity :  0.5723621878111541
+volume : 0.010498046875
+Duration :  2.2287528344671204
+PitchVariance =  6.5274607340494795
+PitchRange =  405.65206061469183
+Rate in WPM :  26.91650390625

@@ -1,0 +1,8 @@
+Sad
+No of Words in a sentcence :  3
+Intensity :  22.089555506634998
+volume : 0.03774705319203428
+Duration :   0.5242479213907786
+PitchVariance =  0.33595670812270223
+PitchRange =  443.7375297546387
+Rate in WPM : 91.18268700606507
