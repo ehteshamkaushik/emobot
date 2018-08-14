@@ -17,7 +17,8 @@ import Domains.GenerateEmotion as ge
 
 root = Tk()
 
-global button1, button2, button3, button4, lable1, no_of_words
+global button1, button2, button3, button4, lable1, no_of_words, \
+    lable_duration, lable_intensity, lable_pitch, lable_rate, lable_signal_energy, lable_volume, lable_emotion
 
 p = pyaudio.PyAudio()
 frames = []
@@ -164,6 +165,7 @@ def calculate():
     data, samplerate = sf.read('output.wav')
     speech.signal_energy = normalize(0.0001, 0.06, 0.001, 0.01, stEnergy(data))
     print("Signal Energy:", speech.signal_energy)
+    lable_signal_energy.config(text="Signal Energy : "+str(speech.signal_energy))
     data1 = []
     data2 = []
 
@@ -183,6 +185,7 @@ def calculate():
     intensity = 10 * math.log(ratio, 10)
     speech.intensity = normalize(15, 40, 25, 35, intensity)
     print("Intensity : ", intensity)
+    lable_intensity.config(text="Intensity : "+str(intensity))
 
     zeroSamples = 0
     start = False
@@ -210,15 +213,20 @@ def calculate():
     avg = calculate_volume(data1, data2)
     speech.volume = normalize(0.01, 0.15, 0.05, 0.09, avg)
     print("volume : " + str(avg))
+    lable_volume.config(text="volume : " + str(avg))
     zerotime = zeroSamples/samplerate
     averageDuration = zerotime/no_of_words
     speech.duration = normalize(0.2, 1.3, 0.4, 0.8, averageDuration)
     print("Duration : ", averageDuration)
+    lable_duration.config(text="Duration : "+str(averageDuration))
     speech.average_pitch = normalize(55, 85, 68, 72, detect_pitch())
+    print("Average Pitch : ", speech.average_pitch)
+    lable_pitch.config(text="Average Pitch : " + str(speech.average_pitch))
 
     wpm = no_of_words*60/dur
     speech.rate = normalize(20, 140, 60, 100, wpm)
     print("Rate in WPM : ", wpm)
+    lable_rate.config(text="Rate in WPM : " + str(wpm))
     abstract_domain = abd.AbstractDomain()
     affective_domain = afd.AffectiveDomain()
     perception = pc.Perception(speech)
@@ -226,6 +234,7 @@ def calculate():
     perception.calculate()
     generate.calculateEmotions()
     print(affective_domain)
+    lable_emotion.config(text=str(affective_domain))
 
 
 def normalize(minval, maxval, avgminval, avgmaxval, val):
@@ -250,10 +259,24 @@ button2 = Button(root, text="Stop Recording", command=stop)
 button3 = Button(root, text="Recognize Audio", command=recognize)
 button4 = Button(root, text="Calculate", command=calculate)
 lable1 = Label(root, text="Click Recognize to see text")
+lable_signal_energy = Label(root, text="Signal Energy")
+lable_intensity = Label(root, text="Intensity")
+lable_volume = Label(root, text="Volume")
+lable_duration = Label(root, text="Duration")
+lable_rate = Label(root, text="Rate in Wpm")
+lable_pitch = Label(root, text="Pitch")
+lable_emotion = Label(root, text="Emotion")
+
 
 button1.pack()
 button2.pack()
 button3.pack()
 button4.pack()
 lable1.pack()
+lable_duration.pack()
+lable_signal_energy.pack()
+lable_volume.pack()
+lable_rate.pack()
+lable_pitch.pack()
+lable_emotion.pack()
 root.mainloop()
