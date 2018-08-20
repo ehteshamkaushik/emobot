@@ -28,6 +28,17 @@ RATE = 44100
 CHUNK = 8192
 FORMAT = pyaudio.paInt16
 speech = sp.Speech()
+sample_values = []
+
+
+def read_values():
+    global sample_values
+    with open('sample_values.txt') as f:
+        lines = f.readlines()
+    f.close()
+    for i in lines:
+        sample_values.append(i.replace('\n', '').split(' '))
+    print(sample_values)
 
 
 def callback(in_data, frame_count, time_info, status):
@@ -67,6 +78,7 @@ def stop():
 
 def recognize():
     global no_of_words
+
     AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "output.wav")
     r = sr.Recognizer()
     with sr.AudioFile(AUDIO_FILE) as source:
@@ -155,6 +167,7 @@ def detect_pitch():
 
     return np.asarray(pitches1).mean()
 
+
 def stEnergy(frame):
     """Computes signal energy of frame"""
     return np.sum(frame ** 2) / np.float64(len(frame))
@@ -162,8 +175,9 @@ def stEnergy(frame):
 
 def calculate():
     global no_of_words
+    read_values()
     data, samplerate = sf.read('output.wav')
-    speech.signal_energy = normalize(0.0001, 0.06, 0.001, 0.01, stEnergy(data))
+    speech.signal_energy = normalize(0, stEnergy(data))
     print("Signal Energy:", speech.signal_energy)
     lable_signal_energy.config(text="Signal Energy : "+str(speech.signal_energy))
     data1 = []
@@ -183,7 +197,7 @@ def calculate():
     maxpeak = max(peak1, peak2)
     ratio = (maxpeak*maxpeak)/(.01*.01)
     intensity = 10 * math.log(ratio, 10)
-    speech.intensity = normalize(15, 40, 25, 35, intensity)
+    speech.intensity = normalize(1, intensity)
     print("Intensity : ", speech.intensity)
     lable_intensity.config(text="Intensity : "+str(intensity))
 
@@ -211,20 +225,20 @@ def calculate():
     # print("No of dur: ", dur)
 
     avg = calculate_volume(data1, data2)
-    speech.volume = normalize(0.01, 0.15, 0.05, 0.09, avg)
+    speech.volume = normalize(2, avg)
     print("volume : ", speech.volume)
     lable_volume.config(text="volume : " + str(avg))
     zerotime = zeroSamples/samplerate
     averageDuration = zerotime/no_of_words
-    speech.duration = normalize(0.2, 1.3, 0.4, 0.8, averageDuration)
+    speech.duration = normalize(3, averageDuration)
     print("Duration : ", speech.duration)
     lable_duration.config(text="Duration : "+str(averageDuration))
-    speech.average_pitch = normalize(55, 85, 68, 72, detect_pitch())
+    speech.average_pitch = normalize(4, detect_pitch())
     print("Average Pitch : ", speech.average_pitch)
     lable_pitch.config(text="Average Pitch : " + str(speech.average_pitch))
 
     wpm = no_of_words*60/dur
-    speech.rate = normalize(20, 140, 60, 100, wpm)
+    speech.rate = normalize(5, wpm)
     print("Rate in WPM : ", speech.rate)
     lable_rate.config(text="Rate in WPM : " + str(wpm))
     abstract_domain = abd.AbstractDomain()
@@ -236,13 +250,36 @@ def calculate():
     print(affective_domain)
     lable_emotion.config(text=str(affective_domain))
     print(abstract_domain)
+    thefile = open('sample_values.txt', 'w')
+    for i in sample_values:
+        for j in i:
+            thefile.write(str(j)+" ")
+        thefile.write("\n")
 
 
-def normalize(minval, maxval, avgminval, avgmaxval, val):
-    minValue = minval
-    maxValue = maxval
-    avgmin = avgminval
-    avgmax = avgmaxval
+def normalize(k, val):
+    global sample_values
+    print(sample_values)
+    minValue = getdouble(sample_values[k][0])
+    maxValue = getdouble(sample_values[k][1])
+    avgmin = getdouble(sample_values[k][2])
+    avgmax = getdouble(sample_values[k][3])
+
+    if val > maxValue:
+        portion = (avgmax - avgmin) / (maxValue - minValue)
+        avgmax += portion*(val-maxValue)
+        maxValue = val
+        sample_values[k][1] = maxValue
+        sample_values[k][3] = avgmax
+
+    if val < minValue:
+        portion = (avgmax - avgmin) / (maxValue - minValue)
+        avgmin -= portion*(minValue - val)
+        minValue = val
+        sample_values[k][0] = minValue
+        sample_values[k][2] = avgmin
+
+
     avgvalue = (avgmin + avgmax)/2
     value = val
     if value >= avgvalue:
