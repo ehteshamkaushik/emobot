@@ -20,8 +20,8 @@ class AbstractDomain(dict):
     def __repr__(self) -> str:
         return "Calculated Variables: \n" + "suddenness=" + str(self.suddenness) + "\nfamiliarity=" \
                + str(self.familiarity) + "\npredictibility=" + str(self.predictability) + "\nvalence=" \
-               + str(self.valence) + "\ndiscrepancyFromExpectation=" + str(self.discrepancyFromExpectation) \
-               +"\nconduciveToGoal=" + str(self.conduciveToGoal) + "\nurgency=" + str(self.urgency)
+               + str(self.valence) + "\ndiscrepancyFromExpectation=" + str(self.discrepancy_from_expectation) \
+               +"\nconduciveToGoal=" + str(self.conducive_to_goal) + "\nurgency=" + str(self.urgency)
 
 
 

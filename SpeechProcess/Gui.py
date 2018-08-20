@@ -184,7 +184,7 @@ def calculate():
     ratio = (maxpeak*maxpeak)/(.01*.01)
     intensity = 10 * math.log(ratio, 10)
     speech.intensity = normalize(15, 40, 25, 35, intensity)
-    print("Intensity : ", intensity)
+    print("Intensity : ", speech.intensity)
     lable_intensity.config(text="Intensity : "+str(intensity))
 
     zeroSamples = 0
@@ -212,12 +212,12 @@ def calculate():
 
     avg = calculate_volume(data1, data2)
     speech.volume = normalize(0.01, 0.15, 0.05, 0.09, avg)
-    print("volume : " + str(avg))
+    print("volume : ", speech.volume)
     lable_volume.config(text="volume : " + str(avg))
     zerotime = zeroSamples/samplerate
     averageDuration = zerotime/no_of_words
     speech.duration = normalize(0.2, 1.3, 0.4, 0.8, averageDuration)
-    print("Duration : ", averageDuration)
+    print("Duration : ", speech.duration)
     lable_duration.config(text="Duration : "+str(averageDuration))
     speech.average_pitch = normalize(55, 85, 68, 72, detect_pitch())
     print("Average Pitch : ", speech.average_pitch)
@@ -225,7 +225,7 @@ def calculate():
 
     wpm = no_of_words*60/dur
     speech.rate = normalize(20, 140, 60, 100, wpm)
-    print("Rate in WPM : ", wpm)
+    print("Rate in WPM : ", speech.rate)
     lable_rate.config(text="Rate in WPM : " + str(wpm))
     abstract_domain = abd.AbstractDomain()
     affective_domain = afd.AffectiveDomain()
@@ -235,6 +235,7 @@ def calculate():
     generate.calculateEmotions()
     print(affective_domain)
     lable_emotion.config(text=str(affective_domain))
+    print(abstract_domain)
 
 
 def normalize(minval, maxval, avgminval, avgmaxval, val):
@@ -278,5 +279,6 @@ lable_signal_energy.pack()
 lable_volume.pack()
 lable_rate.pack()
 lable_pitch.pack()
+lable_intensity.pack()
 lable_emotion.pack()
 root.mainloop()
